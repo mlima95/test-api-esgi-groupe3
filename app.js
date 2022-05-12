@@ -7,5 +7,6 @@ const app = express();
 app.use(express.json());
 
 app.use(crud('/users', sequelizeCrud(User)));
-
+app.use(crud('/burgers', sequelizeCrud(Burger)));
+app.use(crud('/orders', sequelizeCrud(Order)));
 module.exports = app;
