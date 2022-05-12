@@ -3,7 +3,6 @@ const {default: crud} = require("express-crud-router");
 const {default: sequelizeCrud} = require("express-crud-router-sequelize-v6-connector");
 const {User, Burger, Order} = require("./models");
 const bcrypt = require("bcrypt");
-
 const app = express();
 app.use(express.json());
 

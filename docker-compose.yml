@@ -21,6 +21,7 @@ services:
       - 3000:3000
     environment:
       PORT: 3000
+      SECRET_KEY: "esgi-test-api-g3"
     volumes:
       - .:/home/node/app
     depends_on:
