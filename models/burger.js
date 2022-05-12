@@ -1,7 +1,9 @@
 'use strict';
 const {
-    Model
+    Model,
+    DataTypes
 } = require('sequelize');
+const db = require('./db');
 
 class Burger extends Model {
     static associate(models) {

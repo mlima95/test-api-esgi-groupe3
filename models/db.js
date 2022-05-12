@@ -1,15 +1,13 @@
-const {Sequelize, DataTypes} = require('sequelize');
-const db = {}
-db.Sequelize = Sequelize;
+const Sequelize = require('sequelize');
 
-db.sequelize = new Sequelize('postgres://root:password@postgresdb:5432/app') // Example for postgres
+const sequelize = new Sequelize('postgres://root:password@postgresdb:5432/app') // Example for postgres
 
 try {
-    db.sequelize.authenticate();
+    sequelize.authenticate();
     console.log('Connection has been established successfully.');
 } catch (error) {
     console.error('Unable to connect to the database:', error);
 }
 
-module.exports = db;
+module.exports = sequelize;
 

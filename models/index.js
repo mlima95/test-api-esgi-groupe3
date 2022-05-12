@@ -1,31 +1,32 @@
-const db = require('db');
-db.user = require("../models/user")(db.sequelize, db.Sequelize);
-db.order = require("../models/order")(db.sequelize, db.Sequelize);
-db.burger = require("../models/burger")(db.sequelize, db.Sequelize);
+exports.sequelize = require('./db');
+exports.User = require("../models/user");
+exports.Order = require("../models/order");
+exports.Burger = require("../models/burger");
 
-db.user.hasMany(db.order, {
+exports.User.hasMany(exports.Order, {
     foreignKey: 'userId',
     as: 'orders'
 });
-db.order.belongsTo(db.user, {
+exports.Order.belongsTo(exports.User, {
     foreignKey: 'orderId',
     as: 'user'
 });
-db.order.hasOne(db.user, {
+exports.Order.hasOne(exports.User, {
     foreignKey: 'orderId'
 });
-// db.order.hasMany(db.burger, {
+// exports.Order.hasMany(exports.Burger, {
 //     foreignKey: 'orderId',
 //     as: 'burgers'
 // });
-db.burger.belongsToMany(db.order, {
+exports.Burger.belongsToMany(exports.Order, {
     through: 'order_burgers',
     foreignKey: 'burgerId',
     otherKey: 'orderId'
 });
 
-db.order.belongsToMany(db.burger, {
+exports.Order.belongsToMany(exports.Burger, {
     through: 'burger_orders',
     foreignKey: 'orderId',
     otherKey: 'burgerId'
 });
+

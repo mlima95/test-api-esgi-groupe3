@@ -1,6 +1,14 @@
-const db = require('/models.js');
-db.sequelize.sync({alter: true}).then(() => {
-    console.log("The database sync succefully");
-}).catch(() => {
-    console.log("The database aren't sync");
-})
+const { sequelize } = require("./models");
+
+sequelize
+    .sync({ alter: true })
+    .then(() => {
+        console.log("Database synced");
+    })
+    .catch((err) => {
+        console.log("Error creating database");
+        console.log(err);
+    })
+    .finally(() => {
+        sequelize.close();
+    });

@@ -1,7 +1,9 @@
 'use strict';
 const {
-    Model
+    Model,
+    DataTypes
 } = require('sequelize');
+const db = require('./db');
     class Order extends Model {
         static associate(models) {
             // define association here
@@ -12,7 +14,7 @@ const {
         total: DataTypes.DOUBLE,
     }, {
         sequelize,
-        modelName: 'Burger',
+        modelName: 'Order',
     });
 
 module.exports = Order;
