@@ -3,7 +3,7 @@ const {
     Model,
     DataTypes
 } = require('sequelize');
-const db = require('./db');
+const sequelize = require('./db');
     class Order extends Model {
         static associate(models) {
             // define association here

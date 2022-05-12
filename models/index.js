@@ -11,9 +11,9 @@ exports.Order.belongsTo(exports.User, {
     foreignKey: 'orderId',
     as: 'user'
 });
-exports.Order.hasOne(exports.User, {
-    foreignKey: 'orderId'
-});
+// exports.Order.hasOne(exports.User, {
+//     foreignKey: 'orderId'
+// });
 // exports.Order.hasMany(exports.Burger, {
 //     foreignKey: 'orderId',
 //     as: 'burgers'
