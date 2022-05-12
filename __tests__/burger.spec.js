@@ -1,9 +1,7 @@
 const {sequelize} = require("../models");
 const supertest = require("supertest");
-const models = require("../models");
 const client = supertest(require("../app.js"));
-const app = require('../app');
-const cls = require('cls-hooked');
+
 
 let txn;
 const testBurger = {id: 999, name: "MagBurger", price: 10.0};
@@ -30,7 +28,6 @@ describe('Burgers', () => {
   });
   it("should create a burger", async () => {
     const response = await client.post("/burgers").send(testBurger);
-    console.log("aaaaaaaaaaaaaa", response.body)
     expect(response.statusCode).toBe(201);
   });
   it("should update a burger", async () => {
@@ -41,8 +38,6 @@ describe('Burgers', () => {
 
   it('should update partially a burger', async () => {
     await createUser();
-    console.log("adadadada", await client.get("/burgers"));
-
     const response = await client.patch(`/burgers/${testBurger.id}`).send({name: "MagBurger"});
     expect(response.statusCode).toBe(200);
   });
@@ -72,7 +67,6 @@ describe('Burgers', () => {
   });
 
 });
-
 
 createUser = async () => {
   await client.post("/burgers").send(testBurger);
