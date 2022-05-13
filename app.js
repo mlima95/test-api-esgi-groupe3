@@ -10,7 +10,7 @@ app.use(express.json());
 app.use("/users", require("./routes/users"))
 app.use("/login", require("./routes/login"));
 
-app.use([checkJWT, checkRoleUser, checkRoleAdmin]);
+app.use([checkJWT, checkRoleAdmin]);
 
 
 // Don't override the create

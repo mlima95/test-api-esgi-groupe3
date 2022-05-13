@@ -15,40 +15,43 @@ const extractBearerToken = headerValue => {
 exports.checkJWT = async (req, res, next) => {
     let token = extractBearerToken(req.headers['authorization']);
 
-    if(token){
+    if (token) {
 
-        jwt.verify(token, process.env.SECRET_KEY, async (err, user)=>{
+        jwt.verify(token, process.env.SECRET_KEY, async (err, user) => {
             console.log({token, user, err})
-            if(err){
+            if (err) {
                 return res.status(401).send({message: "token not valid"});
-            } else{
+            } else {
                 req.user = await User.findOne({where: {username: user.username}});
                 next();
             }
 
         });
-    }else{
+    } else {
         return res.status(401).send({message: "token required"});
     }
 }
 
 exports.checkRoleAdmin = async (req, res, next) => {
     if (req.method === "POST" || req.method === "PUT" || req.method === "DELETE" || req.method === "PATCH") {
-    if(req.user.roles !== "ADMIN"){
-        return res.status(401).send({message: "unauthorized"});
-    }
-    next();
+        console.log(req.user.roles);
+        if (req.user.roles !== "ADMIN") {
+            return res.status(401).send({message: "unauthorized"});
+        }
+        next();
+    } else if (req.method === "GET") {
+        next();
     } else {
         return res.status(401).send({message: "unauthorized"});
     }
 }
 
 exports.checkRoleUser = async (req, res, next) => {
-    if (req.method === "GET"){
-    if(req.user.roles !== "USER"){
-        return res.status(401).send({message: "unauthorized"});
-    }
-    next();
+    if (req.method === "GET") {
+        if (req.user.roles !== "USER") {
+            return res.status(401).send({message: "unauthorized"});
+        }
+        next();
     } else {
         return res.status(401).send({message: "unauthorized"});
     }
@@ -56,9 +59,9 @@ exports.checkRoleUser = async (req, res, next) => {
 
 exports.checkRole = async (role) => {
     return async (req, res, next) => {
-        if(role === req.user.roles){
+        if (role === req.user.roles) {
             next();
-        } else{
+        } else {
             return res.status(401).send({message: "unauthorized"});
         }
     }
