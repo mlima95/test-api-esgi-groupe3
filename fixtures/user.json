@@ -1,0 +1,15 @@
+{
+  "model": "User",
+  "data": {
+    "admin": {
+      "username": "patate",
+      "password": "1234",
+      "roles": "['ROLE_ADMIN']"
+    },
+    "user": {
+      "username": "framboise",
+      "password": "1234",
+      "roles": "['ROLE_USER']"
+    }
+  }
+}
