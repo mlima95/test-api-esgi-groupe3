@@ -28,6 +28,10 @@ User.init({
         unique: true,
         allowNull: false,
     },
+    roles: {
+        type: DataTypes.JSON,
+        allowNull: true,
+    }
 }, {
     sequelize,
     modelName: 'User',

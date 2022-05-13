@@ -17,6 +17,7 @@ app.use(crud('/users', {
 }));
 app.use(crud('/burgers', sequelizeCrud(Burger)));
 app.use(crud('/orders', sequelizeCrud(Order)));
+app.use("/burgers", require("./routes/burgers"));
 app.use("/login", require("./routes/login"));
 
 module.exports = app;
