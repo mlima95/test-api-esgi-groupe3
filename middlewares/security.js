@@ -23,8 +23,6 @@ exports.checkJWT = async (req, res, next) => {
                 req.user = await User.findOne({where: {username: user.username}});
                 next();
             }
-
-
         });
     } else {
         return res.status(401).send({message: "token required"});

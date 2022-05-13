@@ -5,6 +5,7 @@ const users = require("../fixtures/user.json");
 const burgers = require("../fixtures/burger.json");
 const FixtureLoader = require("../fixtures/FixtureLoader.js");
 const fs = require("fs/promises");
+const ReferenceManager = require('../fixtures/ReferenceManager.js');
 
 let txn;
 const testBurger = {id: 999, name: "MagBurger", price: 10.0};
@@ -38,26 +39,32 @@ const logUser = async (usr) => {
 afterAll(async () => {
     await sequelize.close();
 });
+beforeEach(async () => {
+    txn = await sequelize.transaction();
+    sequelize.constructor['_cls'] = new Map();
+    sequelize.constructor['_cls'].set('transaction', txn);
+    await createUser();
+});
 
+afterEach(async () => {
+    await txn.rollback();
+});
 
 describe('Burgers', () => {
-    beforeAll(async () => {
-        txn = await sequelize.transaction();
-        sequelize.constructor['_cls'] = new Map();
-        sequelize.constructor['_cls'].set('transaction', txn);
-        await createUser();
-    });
+
 
     for (const role of roles) {
         it(`#(${role}) Should be 0 burger`, async () => {
-            const token = await logUser(users.data[role]) || "";
+            const user = ReferenceManager.getReference(role + ".fixture");
+            const token = await logUser(user);
             const response = await client.get("/burgers")
                 .set("authorization", "Bearer " + token);
             expect(response.statusCode).toBe(role === "INVALID" ? 401 : 200);
         });
 
         it(`#(${role}) should create a burger`, async () => {
-            const token = await logUser(users.data[role]) || "";
+            const user = ReferenceManager.getReference(role + ".fixture");
+            const token = await logUser(user);
             const response = await client.post("/burgers")
                 .set("authorization", "Bearer " + token)
                 .set("Content-Type", "application/json")
@@ -65,17 +72,17 @@ describe('Burgers', () => {
             expect(response.statusCode).toBe(role === "INVALID" || role === "USER" ? 401 : 201);
         });
 
-
-        // it(`#(${role}) should update partially a burger`, async () => {
-        //     await createBurger();
-        //     const token = role === "INVALID " ? await logUser(users.data[role]) : "";
-        //     console.log("dd", burgers.data.bigmac1.id)
-        //     const response = await client.patch(`/burgers/${burgers.data.bigmac1.id}`)
-        //         .set("authorization", "Bearer " + token)
-        //         .set("Content-Type", "application/json")
-        //         .send({name: "MagBurger"});
-        //     expect(response.statusCode).toBe(200);
-        // });
+        it(`#(${role}) should update partially a burger`, async () => {
+            await createBurger();
+            const user = ReferenceManager.getReference(role + ".fixture");
+            const burger = ReferenceManager.getReference("bigmac1.fixture");
+            const token = await logUser(user);
+            const response = await client.patch(`/burgers/${burger.id}`)
+                .set("authorization", "Bearer " + token)
+                .set("Content-Type", "application/json")
+                .send({name: "MagBurger"});
+            expect(response.statusCode).toBe(200);
+        });
 
         // it(`#(${role}) should delete a burger`, async () => {
         //    await createBurger();
@@ -89,9 +96,7 @@ describe('Burgers', () => {
     }
 
 
-    afterAll(async () => {
-        await txn.rollback();
-    });
+
 
 
 

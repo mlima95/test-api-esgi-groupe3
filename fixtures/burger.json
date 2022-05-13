@@ -2,11 +2,9 @@
   "model": "Burger",
   "data": {
     "bigmac1": {
-      "id": 1,
       "name": "bigmac"
     },
     "macchiken": {
-      "id": 2,
       "name": "macchiken"
     }
   }
