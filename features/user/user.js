@@ -31,7 +31,7 @@ Then('I should get a response with status code {string}', function (string) {
     return 'pending';
 });
 
-Then('the Burger should be deleted', function () {
+Then('the User should be deleted', function () {
     // Write code here that turns the phrase above into concrete actions
     return 'pending';
 });
@@ -135,7 +135,7 @@ When('I request {string} {string}', function (string, string2) {
     return 'pending';
 });
 
-Then('I should receive an array with all the Burgers', function () {
+Then('I should receive an array with all the Users', function () {
     // Write code here that turns the phrase above into concrete actions
     return 'pending';
 });
@@ -146,7 +146,7 @@ Then('the response status should be {int}', function (int) {
     return 'pending';
 });
 
-Then('I should receive a an array with all the Burgers', function () {
+Then('I should receive a an array with all the Users', function () {
     // Write code here that turns the phrase above into concrete actions
     return 'pending';
 });
@@ -162,7 +162,7 @@ Then('I should get a response with status code {string}', function (string) {
     return 'pending';
 });
 
-Then('I should receive a Burger with the same attributes as the payload', function (dataTable) {
+Then('I should receive a User with the same attributes as the payload', function (dataTable) {
     // Write code here that turns the phrase above into concrete actions
     return 'pending';
 });
