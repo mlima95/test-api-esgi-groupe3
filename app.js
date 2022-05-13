@@ -2,7 +2,7 @@ const express = require("express");
 const {default: crud} = require("express-crud-router");
 const {default: sequelizeCrud} = require("express-crud-router-sequelize-v6-connector");
 const {User, Burger, Order} = require("./models");
-const { checkJWT } = require("./middlewares/security");
+const { checkJWT, checkRoleUser, checkRoleAdmin} = require("./middlewares/security");
 const app = express();
 app.use(express.json());
 
@@ -10,7 +10,8 @@ app.use(express.json());
 app.use("/users", require("./routes/users"))
 app.use("/login", require("./routes/login"));
 
-app.use(checkJWT);
+app.use([checkJWT, checkRoleUser, checkRoleAdmin]);
+
 
 // Don't override the create
 const usersCrudRoutes = sequelizeCrud(User);

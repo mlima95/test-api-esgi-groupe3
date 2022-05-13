@@ -31,3 +31,35 @@ exports.checkJWT = async (req, res, next) => {
         return res.status(401).send({message: "token required"});
     }
 }
+
+exports.checkRoleAdmin = async (req, res, next) => {
+    if (req.method === "POST" || req.method === "PUT" || req.method === "DELETE" || req.method === "PATCH") {
+    if(req.user.roles !== "ADMIN"){
+        return res.status(401).send({message: "unauthorized"});
+    }
+    next();
+    } else {
+        return res.status(401).send({message: "unauthorized"});
+    }
+}
+
+exports.checkRoleUser = async (req, res, next) => {
+    if (req.method === "GET"){
+    if(req.user.roles !== "USER"){
+        return res.status(401).send({message: "unauthorized"});
+    }
+    next();
+    } else {
+        return res.status(401).send({message: "unauthorized"});
+    }
+}
+
+exports.checkRole = async (role) => {
+    return async (req, res, next) => {
+        if(role === req.user.roles){
+            next();
+        } else{
+            return res.status(401).send({message: "unauthorized"});
+        }
+    }
+}
