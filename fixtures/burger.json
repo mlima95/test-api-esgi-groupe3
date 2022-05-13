@@ -1,0 +1,12 @@
+{
+  "model": "Burger",
+  "data": {
+    "bigmac1": {
+      "name": "bigmac"
+    },
+    "macchiken": {
+      "name": "macchiken"
+    }
+  },
+  "depends": ["user.json"]
+}
