@@ -14,11 +14,9 @@ const extractBearerToken = headerValue => {
 
 exports.checkJWT = async (req, res, next) => {
     let token = extractBearerToken(req.headers['authorization']);
-
     if (token) {
 
         jwt.verify(token, process.env.SECRET_KEY, async (err, user) => {
-            console.log({token, user, err})
             if (err) {
                 return res.status(401).send({message: "token not valid"});
             } else {
@@ -34,8 +32,7 @@ exports.checkJWT = async (req, res, next) => {
 
 exports.checkRoleAdmin = async (req, res, next) => {
     if (req.method === "POST" || req.method === "PUT" || req.method === "DELETE" || req.method === "PATCH") {
-        console.log(req.user.roles);
-        if (req.user.roles !== "ADMIN") {
+        if (!req.user.roles.includes("ADMIN")) {
             return res.status(401).send({message: "unauthorized"});
         }
         next();

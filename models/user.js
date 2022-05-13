@@ -4,6 +4,7 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('./db');
+const bcrypt = require('bcrypt');
 class User extends Model {
     static associate(models) {
         // define association here
@@ -17,7 +18,6 @@ User.init({
     },
     password: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
     },
     roles: {
@@ -26,7 +26,11 @@ User.init({
     }
 }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'User'
 });
-
+const encodePassword = (user) => {
+    user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+};
+User.addHook("beforeCreate", encodePassword);
+User.addHook("beforeUpdate", encodePassword);
 module.exports = User;

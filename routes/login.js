@@ -5,12 +5,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 router.post("/", async (req, res) => {
     try {
+        console.log("qcdfffcf",req.body)
         User.findOne({
             where: {
-                username: req.body.username
+                username: req?.body?.username || ""
             }
         }).then(async (user) => {
-
+            console.log({user})
             if (!user) {
                 return res.status(404).send({message: "User not found"});
             }
@@ -23,9 +24,8 @@ router.post("/", async (req, res) => {
                 if (response) {
                     const expireIn = "24h";
                     const token = jwt.sign({username: user.username}, process.env.SECRET_KEY, {expiresIn: expireIn});
-                    res.header('Authorisation', 'Bearer ' + token);
                     return res.status(200).send({
-                        message: "Authentification succesfull",  
+                        message: "Authentification succesfull",
                          token
                     });
                 }
@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
             });
 
         }).catch((err) => {
-
+            console.log(err)
         });
     } catch (err) {
         console.log(err);

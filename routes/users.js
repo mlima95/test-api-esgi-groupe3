@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
             delete user.password;
             res.status(201).send(user);
         }).catch((err)=> {
-            console.log(err);
+            console.log("gghgghg",err);
         })
     } catch (err) {
         console.log(err);
