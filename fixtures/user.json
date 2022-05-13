@@ -10,7 +10,7 @@
     "USER": {
       "id": 2,
       "username": "framboise",
-      "password": "1234",
+      "password": "12346",
       "roles": "['USER']"
     }
   }

@@ -47,9 +47,10 @@ Feature: Order
     Then I should get a response with status code "500"
 
   Scenario: Get all Orders but there is no Orders
+    Given I am authenticated as "ADMIN"
     When I request "GET" "/orders"
     Then I should receive an empty array
-    And the response status should be 200
+    And the response should be 200
     And I should receive a an array with 0 elements
 
   Scenario: Get all Orders and there are some Orders

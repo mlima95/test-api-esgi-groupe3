@@ -27,6 +27,7 @@ const logUser = async (usr) => {
         username: usr?.username,
         password: usr?.password
     };
+
     const a = await client.post("/login")
         .set("Content-Type", "application/json")
         .send(credentials);

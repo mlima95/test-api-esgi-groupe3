@@ -24,6 +24,7 @@ exports.checkJWT = async (req, res, next) => {
                 next();
             }
 
+
         });
     } else {
         return res.status(401).send({message: "token required"});
