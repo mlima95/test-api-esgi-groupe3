@@ -6,6 +6,7 @@ const router = new Router();
 router.patch("/:id", checkJWT, async (req, res) => {
     try {
         Burger.update(req.body, { where: { id: req.params.id } }).then((burger)=> {
+            console.log(req.user)
             res.status(200).send({message: "Update patch succefully"});
         }).catch((err)=> {
             console.log(err);

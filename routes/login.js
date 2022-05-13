@@ -10,6 +10,7 @@ router.post("/", async (req, res) => {
                 username: req.body.username
             }
         }).then(async (user) => {
+
             if (!user) {
                 return res.status(404).send({message: "User not found"});
             }
@@ -20,19 +21,16 @@ router.post("/", async (req, res) => {
                 }
 
                 if (response) {
-                    const expireIn = 24 * 60 * 60;
-                    const token = jwt.sign({user: user}, process.env.SECRET_KEY, {expiresIn: expireIn});
+                    const expireIn = "24h";
+                    const token = jwt.sign({username: user.username}, process.env.SECRET_KEY, {expiresIn: expireIn});
                     res.header('Authorisation', 'Bearer ' + token);
-                    return res.status(200).send({message: "Authentification succesfull", user: user});
+                    return res.status(200).send({
+                        message: "Authentification succesfull",  
+                         token
+                    });
                 }
-
                 return res.status(401).send({message: "Invalid credentials"});
             });
-            // if(!passwordIsValid){
-            //
-            // }
-
-            // res.status(200).send(user);
 
         }).catch((err) => {
 

@@ -10,14 +10,6 @@ class User extends Model {
     }
 };
 User.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: {
-        type: DataTypes.STRING,
-        validate: {
-            isEmail: true,
-        },
-    },
     username: {
         type: DataTypes.STRING,
         unique: true,
