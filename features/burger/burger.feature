@@ -84,3 +84,25 @@ Feature: Burger
       | price          | "5"             |
     When I request "POST" "/burgers"
     And I should get a response with status code 500
+
+  Scenario: Delete a Burger but without token
+    When I request "DELETE" "/burgers/42069"
+    Then I should get a response with status code 401
+
+  Scenario: Update a Burger but without token
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "PUT" "/burgers/5"
+    Then I should get a response with status code 401
+
+  Scenario: Get all Burgers but without token
+    When I request "GET" "/burgers"
+    Then I should get a response with status code 401
+
+  Scenario: Create a Burger but without token
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "POST" "/burgers"
+    Then I should get a response with status code 401

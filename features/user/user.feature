@@ -64,12 +64,36 @@ Feature: User
     When I request "POST" "/users"
     And I should get a response with status code 201
     Then I should receive an element with the following attributes
-      | users          | "test"  |
+      | username          | "test"  |
 
   Scenario: Create a User with an invalid payload
     Given I load fixtures "user.json"
     And I am authenticated as "ADMIN"
     And I send a request with the following body:
-      | test           | "test" |
+      | username           | "test" |
     When I request "POST" "/users"
     And I should get a response with status code 500
+
+  Scenario: Delete a User but without token
+    When I request "DELETE" "/users/42069"
+    Then I should get a response with status code 401
+
+  Scenario: Update a User but without token
+    Given I send a request with the following body:
+      | username           | "test" |
+      | password           | "1234" |
+    When I request "PUT" "/users/5"
+    Then I should get a response with status code 401
+
+  Scenario: Get all Users but without token
+    When I request "GET" "/users"
+    Then I should get a response with status code 401
+
+  Scenario: Create a User but without token
+    Given I send a request with the following body:
+      | username           | "test" |
+      | password           | "1234" |
+    When I request "POST" "/users"
+    And I should get a response with status code 201
+    Then I should receive an element with the following attributes
+      | username          | "test"  |

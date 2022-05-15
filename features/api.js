@@ -41,23 +41,6 @@ AfterAll(async () => {
 });
 
 When('I request {string} {string}', async function (method, path) {
-    // if (path.includes(":id")) {
-    //     let pathSplit = path.split("/");
-    //     let string = "";
-    //     switch (pathSplit[1]) {
-    //         case "orders":
-    //             string = "order1";
-    //             break;
-    //         case "users":
-    //             string = "ADMIN";
-    //             break;
-    //         case "burgers":
-    //             string = "bigmac1";
-    //             break;
-    //     }
-    //     const obj = ReferenceManager.getReference(string + ".fixture");
-    //     path = path.replace(":id", obj.id);
-    // }
     this.request = client[method.toLowerCase()](interpolateString(path));
     if (this.token) {
         this.request.set('authorization', `Bearer ${this.token}`);
