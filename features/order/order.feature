@@ -106,3 +106,33 @@ Feature: Order
       | total            | 5                |
     When I request "POST" "/orders"
     Then I should get a response with status code 401
+
+  Scenario: Delete a Order as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    When I request "DELETE" "/orders/42069"
+    Then I should get a response with status code 401
+
+  Scenario: Update a Order as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    And I send a request with the following body:
+      | name           | price |
+      | "Cheeseburger" | 5.00  |
+    When I request "PUT" "/orders/5"
+    Then I should get a response with status code 401
+
+  Scenario: Get all Orders as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    When I request "GET" "/orders"
+    Then I should get a response with status code 200
+
+  Scenario: Create a Order as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    And I send a request with the following body:
+      | burgers          | ['Cheeseburger'] |
+      | total            | 5                |
+    When I request "POST" "/orders"
+    Then I should get a response with status code 401

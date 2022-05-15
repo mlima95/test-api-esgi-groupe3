@@ -106,3 +106,33 @@ Feature: Burger
       | price          | 5              |
     When I request "POST" "/burgers"
     Then I should get a response with status code 401
+
+  Scenario: Delete a Burger as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    When I request "DELETE" "/burgers/42069"
+    Then I should get a response with status code 401
+
+  Scenario: Update a Burger as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "PUT" "/burgers/5"
+    Then I should get a response with status code 401
+
+  Scenario: Get all Burgers as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    When I request "GET" "/burgers"
+    Then I should get a response with status code 200
+
+  Scenario: Create a Burger as user
+    Given I load fixtures "user.json"
+    And I am authenticated as "USER"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "POST" "/burgers"
+    Then I should get a response with status code 401
