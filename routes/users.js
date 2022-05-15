@@ -8,7 +8,6 @@ router.post("/", async (req, res) => {
     try {
          await User.create({
             ...req.body,
-            password: bcrypt.hashSync(req.body.password, 8)
         }).then((user)=> {
             delete user.password;
             res.status(201).send(user);

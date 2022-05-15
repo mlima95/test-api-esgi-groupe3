@@ -1,0 +1,17 @@
+{
+  "model": "Order",
+  "data": {
+    "order1": {
+      "id": 1,
+      "burgers": "['bigmac']",
+      "total": "1234"
+
+    },
+    "order2": {
+      "id": 2,
+      "burgers": "['macchiken']",
+      "total": "12345"
+
+    }
+  }
+}

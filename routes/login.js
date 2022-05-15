@@ -5,22 +5,18 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 router.post("/", async (req, res) => {
     try {
-        console.log("qcdfffcf",req.body)
         User.findOne({
             where: {
                 username: req?.body?.username || ""
             }
         }).then(async (user) => {
-            console.log({user})
             if (!user) {
                 return res.status(404).send({message: "User not found"});
             }
-
             let passwordIsValid = bcrypt.compare(req.body.password, user.password, (err, response) => {
                 if (err) {
                     throw new Error(err);
                 }
-
                 if (response) {
                     const expireIn = "24h";
                     const token = jwt.sign({username: user.username}, process.env.SECRET_KEY, {expiresIn: expireIn});

@@ -3,7 +3,7 @@ const supertest = require("supertest");
 const app = require("../app");
 const ReferenceManager = require("../fixtures/ReferenceManager");
 const {sequelize} = require("../models");
-const { expect } = require("expect");
+const {expect} = require("expect");
 
 const FixtureLoader = require('../fixtures/FixtureLoader.js');
 const fs = require('fs/promises');
@@ -15,6 +15,7 @@ function interpolateString(str) {
         return ReferenceManager.getValue(name);
     });
 }
+
 function interpolate(obj) {
     for (let key in obj) {
         if (typeof obj[key] === "string") {
@@ -40,28 +41,42 @@ AfterAll(async () => {
 });
 
 When('I request {string} {string}', async function (method, path) {
+    // if (path.includes(":id")) {
+    //     let pathSplit = path.split("/");
+    //     let string = "";
+    //     switch (pathSplit[1]) {
+    //         case "orders":
+    //             string = "order1";
+    //             break;
+    //         case "users":
+    //             string = "ADMIN";
+    //             break;
+    //         case "burgers":
+    //             string = "bigmac1";
+    //             break;
+    //     }
+    //     const obj = ReferenceManager.getReference(string + ".fixture");
+    //     path = path.replace(":id", obj.id);
+    // }
     this.request = client[method.toLowerCase()](interpolateString(path));
-    if(this.token) {
+    if (this.token) {
         this.request.set('authorization', `Bearer ${this.token}`);
     }
-    this.response = await this.request.send();
+    if (this.payload) {
+        this.request.set("Content-Type", "application/json");
+    }
+    this.response = await this.request.send(this.payload || null);
 });
 
 Given("I am authenticated as {string}", async function (string) {
 
-    await FixtureLoader(
-        await fs.realpath(__dirname + "/../fixtures/user.json")
-    );
     const user = ReferenceManager.getReference(string + ".fixture");
-
-    console.log("aaaaaaaaaaaaaaaa", {user})
     const res = await client.post("/login")
         .set("Content-Type", "application/json").send({
             username: user.username,
             password: user.password
         });
     this.token = res.body.token;
-    console.log("aaaaaaaaaaaaaaaa", res.body, this.token)
 });
 
 When('I send a request with the following body:', function (dataTable) {
@@ -69,17 +84,30 @@ When('I send a request with the following body:', function (dataTable) {
 });
 
 
-Then('I should get a response with status code {string}', function (string) {
-    expect(this.response.status).toBe(string);
+Then('I should get a response with status code {int}', function (int) {
+    expect(this.response.status).toBe(int);
 });
 
 Then('the {string} should be deleted', function (entity) {
     expect(ReferenceManager.getValue(entity)).toBe(null);
 });
 
-Then('the response should be {int}', function (int) {
-    expect(this.response.status).toBe(int);
-});
+// Then('the response should be:', function (dataTable) {
+//     console.log(this.response.body);
+//     expect(this.response.body).toBe(dataTable.rowsHash());
+// });
+
+Then(
+    "I should receive an element with the following attributes",
+    function (dataTable) {
+        const expected = interpolate(dataTable.rowsHash());
+        const actual = this.response.body;
+        expect(typeof actual).toBe("object");
+        Object.keys(expected).forEach((key) => {
+            expect(actual).toHaveProperty(key, expected[key]);
+        });
+    }
+);
 
 Then('I should receive an empty array', function () {
     expect(this.response.body.length).toBe(0);
@@ -89,8 +117,8 @@ Then('I should receive a an array with {int} elements', function (int) {
     expect(this.response.body.length).toBe(int);
 });
 
-Then('I should receive an array with all the {string}', function (entity) {
-    expect(this.response.body.length).toBe(ReferenceManager.getValue(entity).length);
+Then("I should have an array with {int} elements", function (int) {
+    expect(this.response.body).toHaveLength(int);
 });
 
 Then('I should receive a order with the same attributes as the payload', function (dataTable) {

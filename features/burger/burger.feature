@@ -1,74 +1,86 @@
 Feature: Burger
 
   Scenario: Delete a Burger but the Burger doesnt exist
-    Given I request "DELETE" "/burgers/:id"
-    When I send a request with the following body:
-      | id    |
-      | 42069 |
-    Then I should get a response with status code "500"
+    Given I load fixtures "user.json"
+    And I am authenticated as "ADMIN"
+    When I request "DELETE" "/burgers/42069"
+    Then I should get a response with status code 500
 
   Scenario: Delete a Burger that exists
-    Given I request "DELETE" "/burgers/:id"
-    When I send a request with the following body:
-      | id |
-      | 1  |
-    Then I should get a response with status code "200"
-    And the Burger should be deleted
+    Given I load fixtures "user.json,burger.json"
+    And I am authenticated as "ADMIN"
+    When I request "DELETE" "/burgers/{{bigmac1.id}}"
+    Then I should get a response with status code 200
 
   Scenario: Update a Burger but the Burger doesnt exist and i have a valid payload
-    Given I request "PUT" "/burgers/:id"
-    When I send the request with the following body:
-      | name           | price |
-      | "Cheeseburger" | 5.00  |
-    Then I should get a response with status code "500"
+    Given I load fixtures "user.json"
+    And I am authenticated as "ADMIN"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "PUT" "/burgers/5"
+    Then I should get a response with status code 404
 
   Scenario: Update a Burger but the Burger doesnt exist and and an invalid payload
-    Given I request "PUT" "/burgers/:id"
-    When I send the request with the following body:
-      | name | price        |
-      | 10.0 | ChiseBourger |
-    Then I should get a response with status code "500"
+    Given I load fixtures "user.json,burger.json"
+    And I am authenticated as "ADMIN"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | "5"            |
+    When I request "PUT" "/burgers/22"
+    Then I should get a response with status code 404
 
   Scenario: Update a Burger with a valid payload and the Burger exists
-    Given I request "PUT" "/burgers/:id"
-    When I send the request with the following body:
-      | name         | price |
-      | Cheeseburger | 5.00  |
-    Then I should get a response with status code "200"
-    And the response should be:
-      | name         | price |
-      | Cheeseburger | 5.00  |
+    Given I load fixtures "user.json,burger.json"
+    And I am authenticated as "ADMIN"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "PUT" "/burgers/{{bigmac1.id}}"
+    Then I should get a response with status code 200
+    And I should receive an element with the following attributes
+      | name          | "Cheeseburger" |
 
   Scenario: Update a Burger with a unvalid payload and the Burger exists
-    Given I request "PUT" "/burgers/:id"
-    When I send the request with the following body:
-      | name | price        |
-      | 5.00 | ChiseBourger |
-    Then I should get a response with status code "500"
+    Given I load fixtures "user.json,burger.json"
+    And I am authenticated as "ADMIN"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | "5"            |
+    When I request "PUT" "/burgers/{{bigmac1.id}}"
+    Then I should get a response with status code 500
 
   Scenario: Get all Burgers but there is no Burgers
+    Given I load fixtures "user.json"
+    And I am authenticated as "ADMIN"
     When I request "GET" "/burgers"
     Then I should receive an empty array
-    And the response status should be 200
+    And I should get a response with status code 200
     And I should receive a an array with 0 elements
 
   Scenario: Get all Burgers and there are some Burgers
+    Given I load fixtures "user.json,burger.json"
+    And I am authenticated as "ADMIN"
     When I request "GET" "/burgers"
-    Then I should receive an array with all the Burgers
-    And the response status should be 200
-    And I should receive a an array with all the Burgers
+    Then I should get a response with status code 200
+    And I should have an array with 2 elements
 
   Scenario: Create a Burger with a valid payload
-    When I request "POST" "/burgers" with a payload
-      | name           | price |
-      | "MagBourgueur" | 10    |
-    Then I should get a response with status code "201"
-    And I should receive a Burger with the same attributes as the payload
-      | name           | price |
-      | "MagBourgueur" | 10    |
+    Given I load fixtures "user.json"
+    And I am authenticated as "ADMIN"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | 5              |
+    When I request "POST" "/burgers"
+    And I should get a response with status code 201
+    Then I should receive an element with the following attributes
+      | name          | "Cheeseburger"  |
 
   Scenario: Create a Burger with an invalid payload
-    When I request "POST" "/burgers" with a payload
-      | name     | price |
-      | Bourgeur | "10"  |
-    Then I should get a response with status code "500"
+    Given I load fixtures "user.json"
+    And I am authenticated as "ADMIN"
+    And I send a request with the following body:
+      | name           | "Cheeseburger" |
+      | price          | "5"             |
+    When I request "POST" "/burgers"
+    And I should get a response with status code 500

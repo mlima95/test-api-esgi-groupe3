@@ -11,8 +11,17 @@ class Burger extends Model {
     }
 };
 Burger.init({
-    name: DataTypes.STRING,
-    price: DataTypes.DOUBLE,
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    price: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        validate: {
+            isDecimal: true,
+        }
+    }
 }, {
     sequelize,
     modelName: 'Burger',

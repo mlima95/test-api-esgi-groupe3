@@ -5,13 +5,13 @@
       "id": 1,
       "username": "patate",
       "password": "1234",
-      "roles": "['ADMIN']"
+      "roles": "ADMIN"
     },
     "USER": {
       "id": 2,
       "username": "framboise",
       "password": "12346",
-      "roles": "['USER']"
+      "roles": "USER"
     }
   }
 }

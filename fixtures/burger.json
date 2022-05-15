@@ -2,10 +2,14 @@
   "model": "Burger",
   "data": {
     "bigmac1": {
-      "name": "bigmac"
+      "id": 1,
+      "name": "bigmac",
+      "price": 5
     },
     "macchiken": {
-      "name": "macchiken"
+      "id": 2,
+      "name": "macchiken",
+      "price": 7
     }
   }
 }
